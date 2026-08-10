@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book an Appointment — Velour</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="nav">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">V</span>
+      <span class="brand-name">VELOUR</span>
+    </a>
+    <nav class="links">
+      <a href="index.html">Home</a>
+      <a href="products.html">Shop</a>
+      <a href="appointment.html" class="active">Book Appointment</a>
+      <a href="wishlist.html">Wishlist</a>
+      <a href="index.html#about">About</a>
+      <a id="nav-admin-link" href="admin.html" style="display:none">Admin</a>
+    </nav>
+    <div class="nav-utils">
+      <label class="theme-switch" title="Toggle light / dark">
+        <input type="checkbox" id="theme-toggle">
+        <span class="slider"></span>
+      </label>
+      <a class="nav-icon-link" href="cart.html" title="Cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+        <span id="cart-count" class="cart-badge">0</span>
+      </a>
+      <span id="nav-auth-slot"></span>
+      <a class="nav-cta" href="appointment.html">Reserve a Sitting</a>
+      <button class="nav-toggle" aria-label="Toggle menu">&#9776;</button>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap section-head reveal">
+    <span class="eyebrow">Private Sittings</span>
+    <h2>Book an appointment</h2>
+    <p>Reserve a private session at the Velour studio — bridal, editorial, or an evening face done properly.</p>
+  </div>
+
+  <div class="wrap booking-layout">
+    <div class="info-panel reveal">
+      <span class="eyebrow">What to Expect</span>
+      <h2 style="font-size:2rem;margin-top:12px">A seat, held for you</h2>
+      <p>Every sitting opens with a short consultation — skin, occasion, and how long you'd like the look to last — followed by application with Velour's own line. Sittings run 45–90 minutes.</p>
+
+      <ul class="service-list">
+        <li><span>Signature Face — everyday glam</span><span>$85</span></li>
+        <li><span>Bridal Trial</span><span>$150</span></li>
+        <li><span>Bridal Day-Of</span><span>$300</span></li>
+        <li><span>Editorial / Photoshoot</span><span>$180</span></li>
+        <li><span>Evening Out</span><span>$95</span></li>
+        <li><span>Makeup Lesson (1:1)</span><span>$120</span></li>
+      </ul>
+
+      <p class="muted" style="font-size:0.85rem">Prices are a starting guide and may vary with add-ons such as lashes or airbrushing. A confirmation follows every request within 24 hours.</p>
+    </div>
+
+    <div class="form-card reveal">
+      <form id="booking-form">
+        <div class="field-row">
+          <div class="field">
+            <label for="bk-name">Full Name</label>
+            <input id="bk-name" type="text" placeholder="Your name" required>
+          </div>
+          <div class="field">
+            <label for="bk-phone">Phone</label>
+            <input id="bk-phone" type="tel" placeholder="(000) 000-0000" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="bk-email">Email</label>
+          <input id="bk-email" type="email" placeholder="you@email.com" required>
+        </div>
+
+        <div class="field">
+          <label for="bk-service">Service</label>
+          <select id="bk-service" required>
+            <option value="" disabled selected>Select a service</option>
+            <option>Signature Face — everyday glam</option>
+            <option>Bridal Trial</option>
+            <option>Bridal Day-Of</option>
+            <option>Editorial / Photoshoot</option>
+            <option>Evening Out</option>
+            <option>Makeup Lesson (1:1)</option>
+          </select>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="bk-date">Preferred Date</label>
+            <input id="bk-date" type="date" required>
+          </div>
+          <div class="field">
+            <label for="bk-time">Preferred Time</label>
+            <input id="bk-time" type="time" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="bk-notes">Notes for Your Artist</label>
+          <textarea id="bk-notes" rows="4" placeholder="Occasion, inspiration, skin concerns, anything we should know…"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-solid" style="width:100%;border:none">Request Appointment</button>
+        <p class="form-note muted">This reserves a request, not a confirmed slot — our concierge will follow up to lock in your time.</p>
+
+        <div id="confirm-box" class="confirm-box"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="site" id="contact">
+  <div class="wrap footer-grid">
+    <div class="brand">
+      <span class="brand-mark">V</span>
+      <span class="brand-name">VELOUR</span>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Studio</h4>
+        <a href="products.html">Shop the Collection</a>
+        <a href="appointment.html">Book an Appointment</a>
+        <a href="index.html#about">Our Philosophy</a>
+      </div>
+      <div class="footer-col">
+        <h4>Visit</h4>
+        <p>14 Rue Bordeaux, Design District</p>
+        <p>Tue – Sun, 10am – 7pm</p>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:studio@velour.com">studio@velour.com</a>
+        <a href="tel:+10000000000">+1 (000) 000-0000</a>
+      </div>
+    </div>
+  </div>
+  <p class="footer-bottom">&copy; 2026 Velour Studio. All rights reserved.</p>
+</footer>
+
+<!-- Concierge Chat Widget -->
+<button id="velour-chat-launcher" aria-label="Open concierge chat">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+</button>
+<div id="velour-chat-panel">
+  <div class="chat-head">
+    <span class="brand-mark">V</span>
+    <div class="chat-head-text">
+      <div class="name">VELOUR CONCIERGE</div>
+      <div class="status">Typically replies in minutes</div>
+    </div>
+    <button id="chat-close" class="chat-close" aria-label="Close chat">&times;</button>
+  </div>
+  <div id="chat-body" class="chat-body"></div>
+  <div class="chat-quick">
+    <button class="chat-chip" data-prompt="How do I book an appointment?">Book an appointment</button>
+    <button class="chat-chip" data-prompt="What are your hours?">Studio hours</button>
+    <button class="chat-chip" data-prompt="Tell me about your products">Products</button>
+  </div>
+  <form id="chat-form" class="chat-input-row">
+    <input id="chat-input" type="text" placeholder="Type a message…" autocomplete="off">
+    <button type="submit">Send</button>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> 
+<script src="supabase-config.js"></script> 
+<script src="data.js"></script>
+<script src="ui.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
