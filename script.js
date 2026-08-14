@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const time = document.getElementById("bk-time").value;
 
       if (typeof DB !== "undefined") {
-        await DB.addAppointment({
+        const apptRecord = {
           name,
           service: serviceLabel,
           date,
@@ -52,7 +52,16 @@ document.addEventListener("DOMContentLoaded", () => {
           email: document.getElementById("bk-email")?.value.trim() || "",
           phone: document.getElementById("bk-phone")?.value.trim() || "",
           notes: document.getElementById("bk-notes")?.value.trim() || "",
-        });
+        };
+        await DB.addAppointment(apptRecord);
+
+        // Send the confirmation + studio notification email directly —
+        // simpler and more reliable than relying on a Supabase Database Webhook.
+        fetch("/.netlify/functions/appointment-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ record: apptRecord }),
+        }).catch(() => {}); // email is a nice-to-have; never block the booking on it
       }
 
       const box = document.getElementById("confirm-box");
@@ -82,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
    concierge replies in replyFor() below, so the widget always
    works even without a backend running.
    ========================================================= */
-const VELOUR_CHAT_API = "http://localhost:3000/api/chat"; // point this at your deployed backend
+const VELOUR_CHAT_API = "/.netlify/functions/chat"; // served by your own Netlify site — no separate backend needed
 
 async function askAI(message, history) {
   const res = await fetch(VELOUR_CHAT_API, {
