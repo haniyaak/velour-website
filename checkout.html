@@ -54,13 +54,8 @@
       <form id="checkout-form">
         <div class="field"><label for="co-name">Full Name</label><input id="co-name" required placeholder="Your name"></div>
         <div class="field"><label for="co-email">Email</label><input id="co-email" type="email" required placeholder="you@email.com"></div>
-        <div class="field"><label for="co-address">Shipping Address</label><textarea id="co-address" rows="3" required placeholder="Street, city, postal code"></textarea></div>
-        <div class="field-row">
-          <div class="field"><label for="co-card">Card Number</label><input id="co-card" placeholder="4242 4242 4242 4242" required></div>
-          <div class="field"><label for="co-exp">Expiry</label><input id="co-exp" placeholder="MM/YY" required></div>
-        </div>
-        <p class="muted" style="font-size:0.78rem;margin:-10px 0 20px">This is a demo checkout — no real payment is processed and no card data is stored.</p>
-        <button type="submit" class="btn btn-solid" style="width:100%;border:none">Place Order</button>
+        <p class="muted" style="font-size:0.82rem;margin:-6px 0 20px">You'll enter your shipping address and card details securely on the next screen — Velour never sees or stores your card number.</p>
+        <button type="submit" class="btn btn-solid" style="width:100%;border:none">Proceed to Payment</button>
       </form>
       <div id="checkout-confirm" class="confirm-box"></div>
     </div>
@@ -84,6 +79,12 @@
         <h4>Visit</h4>
         <p>14 Rue Bordeaux, Design District</p>
         <p>Tue – Sun, 10am – 7pm</p>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="refund.html">Refund Policy</a>
       </div>
       <div class="footer-col">
         <h4>Contact</h4>
@@ -119,8 +120,8 @@
   </form>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> 
-<script src="supabase-config.js"></script> 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
 <script src="data.js"></script>
 <script src="ui.js"></script>
 <script src="script.js"></script>
