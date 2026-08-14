@@ -333,6 +333,17 @@ async function initCheckoutPage() {
   const form = document.getElementById("checkout-form");
   if (!form) return;
 
+  // Coming back from a successful Stripe payment
+  if (new URLSearchParams(location.search).get("success") === "true") {
+    document.querySelector(".form-card").innerHTML = `
+      <div class="confirm-box show">
+        <strong style="color:var(--gold-300)">Payment received — thank you!</strong><br>
+        A receipt has been emailed to you, and your order will appear in your
+        <a href="account.html" style="color:var(--gold-300)">Account</a> page shortly.
+      </div>`;
+    return;
+  }
+
   const user = await DB.currentUser();
   if (!user) {
     form.closest(".form-card").innerHTML = `<p class="muted">Please <a href="login.html" style="color:var(--gold-300)">log in</a> to check out.</p>`;
@@ -350,25 +361,31 @@ async function initCheckoutPage() {
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const name = document.getElementById("co-name").value.trim();
-    const address = document.getElementById("co-address").value.trim();
+    const email = document.getElementById("co-email").value.trim();
     const submitBtn = form.querySelector("button[type=submit]");
     submitBtn.disabled = true;
-    submitBtn.textContent = "Placing order…";
+    submitBtn.textContent = "Redirecting to secure payment…";
 
     try {
-      const order = await DB.placeOrder(user.id, { name, address });
-      await paintNavState();
-      document.getElementById("checkout-confirm").innerHTML = `
-        <strong style="color:var(--gold-300)">Order ${order.id} confirmed.</strong><br>
-        Thank you, ${escapeHtml(name)} — a receipt would normally be emailed here. (No real payment was processed; this is a demo checkout.)`;
-      document.getElementById("checkout-confirm").classList.add("show");
-      form.reset();
-      form.style.display = "none";
+      const res = await fetch("/.netlify/functions/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: cart.map((l) => ({ productId: l.productId, shade: l.shade, qty: l.qty })),
+          customerEmail: email,
+          userId: user.id,
+        }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url; // off to Stripe's real, secure payment page
+      } else {
+        throw new Error(data.error || "Could not start checkout.");
+      }
     } catch (err) {
       submitBtn.disabled = false;
-      submitBtn.textContent = "Place Order";
-      alert("Something went wrong placing your order. Please try again.");
+      submitBtn.textContent = "Proceed to Payment";
+      alert("Something went wrong starting checkout. Please try again.");
     }
   });
 }
