@@ -1,15 +1,10 @@
 {
-  "name": "velour-chat-backend",
+  "name": "velour-website",
   "version": "1.0.0",
-  "description": "Optional backend that powers a real AI concierge for the Velour website.",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
+  "private": true,
   "dependencies": {
     "@anthropic-ai/sdk": "^0.30.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2"
+    "@supabase/supabase-js": "^2.45.0",
+    "stripe": "^16.0.0"
   }
 }
