@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Velour</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="nav">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">V</span>
+      <span class="brand-name">VELOUR</span>
+    </a>
+    <nav class="links">
+      <a href="index.html">Home</a>
+      <a href="products.html">Shop</a>
+      <a href="appointment.html">Book Appointment</a>
+      <a href="wishlist.html">Wishlist</a>
+      <a href="index.html#about">About</a>
+      <a id="nav-admin-link" href="admin.html" style="display:none">Admin</a>
+    </nav>
+    <div class="nav-utils">
+      <label class="theme-switch" title="Toggle light / dark">
+        <input type="checkbox" id="theme-toggle">
+        <span class="slider"></span>
+      </label>
+      <a class="nav-icon-link" href="cart.html" title="Cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+        <span id="cart-count" class="cart-badge">0</span>
+      </a>
+      <span id="nav-auth-slot"></span>
+      <a class="nav-cta" href="appointment.html">Reserve a Sitting</a>
+      <button class="nav-toggle" aria-label="Toggle menu">&#9776;</button>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap" style="max-width:760px">
+
+<span class="eyebrow">Legal</span>
+<h2 style="margin:14px 0 30px">Privacy Policy</h2>
+<p class="muted" style="margin-bottom:30px"><em>Placeholder policy — replace before real launch. This is not legal advice; have this reviewed by a lawyer for your actual business and jurisdiction.</em></p>
+
+<h3>What we collect</h3>
+<p>When you create an account, we collect your name, email address, and password (securely encrypted). When you place an order or book an appointment, we collect shipping details and contact information. When you make a purchase, payment is processed directly by Stripe — Velour never sees or stores your full card number.</p>
+
+<h3>How we use it</h3>
+<p>We use your information to process orders, confirm appointments, respond to inquiries, and improve our products and services. We do not sell your personal information to third parties.</p>
+
+<h3>Third-party services</h3>
+<p>We use Supabase for account and order data storage, Stripe for payment processing, and Resend for transactional email. Each of these providers has their own privacy practices governing data they process on our behalf.</p>
+
+<h3>Your rights</h3>
+<p>You may request access to, correction of, or deletion of your personal data at any time by contacting us at studio@velour.com.</p>
+
+<h3>Contact</h3>
+<p>Questions about this policy can be sent to studio@velour.com.</p>
+
+  </div>
+</section>
+
+<footer class="site" id="contact">
+  <div class="wrap footer-grid">
+    <div class="brand">
+      <span class="brand-mark">V</span>
+      <span class="brand-name">VELOUR</span>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Studio</h4>
+        <a href="products.html">Shop the Collection</a>
+        <a href="appointment.html">Book an Appointment</a>
+        <a href="index.html#about">Our Philosophy</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="refund.html">Refund Policy</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:studio@velour.com">studio@velour.com</a>
+        <a href="tel:+10000000000">+1 (000) 000-0000</a>
+      </div>
+    </div>
+  </div>
+  <p class="footer-bottom">&copy; 2026 Velour Studio. All rights reserved.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="data.js"></script>
+<script src="ui.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
