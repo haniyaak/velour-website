@@ -6,6 +6,15 @@ function swatchSVG(icon, stroke) {
   return `<svg viewBox="0 0 24 24" fill="none" stroke="${stroke}" stroke-width="1.2">${ICON_PATHS[icon] || ""}</svg>`;
 }
 
+// Returns real product photo markup if available, otherwise the gradient + icon fallback.
+function productMedia(p, extraStyle = "") {
+  if (p.imageUrl) {
+    return `<img src="${p.imageUrl}" alt="${p.name}" loading="lazy"
+      style="width:100%;height:100%;object-fit:cover;display:block;${extraStyle}">`;
+  }
+  return swatchSVG(p.icon, "#F5EBDD");
+}
+
 function starRow(rating, size = 14) {
   const full = Math.round(rating || 0);
   let out = "";
@@ -83,7 +92,7 @@ async function initProductGrid() {
     <div class="product-card" data-category="${p.category}">
       <a href="product.html?id=${p.id}" style="display:block">
         <div class="product-swatch" style="background:linear-gradient(160deg,${p.colorFrom},${p.colorTo})">
-          ${swatchSVG(p.icon, "#F5EBDD")}
+          ${productMedia(p)}
           <button class="wish-btn ${wished ? "wished" : ""}" data-wish="${p.id}" title="Save to wishlist" onclick="event.preventDefault()">&hearts;</button>
         </div>
       </a>
@@ -171,7 +180,7 @@ async function initProductDetail() {
   root.innerHTML = `
     <div class="pd-grid">
       <div class="product-swatch pd-swatch" style="background:linear-gradient(160deg,${p.colorFrom},${p.colorTo})">
-        ${swatchSVG(p.icon, "#F5EBDD")}
+        ${productMedia(p)}
       </div>
       <div class="pd-info">
         <span class="product-cat">${p.category}</span>
@@ -280,7 +289,7 @@ async function initCartPage() {
             return `<tr>
               <td>
                 <div style="display:flex;align-items:center;gap:12px">
-                  <div class="product-swatch" style="width:52px;height:52px;background:linear-gradient(160deg,${p.colorFrom},${p.colorTo})">${swatchSVG(p.icon, "#F5EBDD")}</div>
+                  <div class="product-swatch" style="width:52px;height:52px;background:linear-gradient(160deg,${p.colorFrom},${p.colorTo})">${productMedia(p)}</div>
                   <a href="product.html?id=${p.id}" style="color:var(--cream-100)">${p.name}</a>
                 </div>
               </td>
@@ -333,7 +342,6 @@ async function initCheckoutPage() {
   const form = document.getElementById("checkout-form");
   if (!form) return;
 
-  // Coming back from a successful Stripe payment
   if (new URLSearchParams(location.search).get("success") === "true") {
     document.querySelector(".form-card").innerHTML = `
       <div class="confirm-box show">
@@ -378,7 +386,7 @@ async function initCheckoutPage() {
       });
       const data = await res.json();
       if (data.url) {
-        window.location.href = data.url; // off to Stripe's real, secure payment page
+        window.location.href = data.url;
       } else {
         throw new Error(data.error || "Could not start checkout.");
       }
@@ -434,7 +442,7 @@ async function initWishlistPage() {
     ? `<div class="product-grid">${products.map((p) => `
         <div class="product-card">
           <a href="product.html?id=${p.id}">
-            <div class="product-swatch" style="background:linear-gradient(160deg,${p.colorFrom},${p.colorTo})">${swatchSVG(p.icon, "#F5EBDD")}</div>
+            <div class="product-swatch" style="background:linear-gradient(160deg,${p.colorFrom},${p.colorTo})">${productMedia(p)}</div>
           </a>
           <div class="product-body">
             <span class="product-cat">${p.category}</span>
@@ -470,13 +478,14 @@ async function initAdminPage() {
     const products = await DB.getProducts();
     document.getElementById("admin-products").innerHTML = `
       <table class="cart-table">
-        <thead><tr><th>Name</th><th>Category</th><th>Price</th><th></th></tr></thead>
+        <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Image URL</th><th></th></tr></thead>
         <tbody>
           ${products.map((p) => `
             <tr>
               <td>${escapeHtml(p.name)}</td>
               <td>${p.category}</td>
               <td><input type="number" data-price="${p.id}" value="${p.price}" style="width:70px;background:rgba(21,5,8,0.4);border:1px solid rgba(212,175,106,0.3);color:var(--cream-100);padding:6px;border-radius:2px"></td>
+              <td><input type="text" data-image="${p.id}" value="${p.imageUrl || ""}" placeholder="/images/name.jpg" style="width:160px;background:rgba(21,5,8,0.4);border:1px solid rgba(212,175,106,0.3);color:var(--cream-100);padding:6px;border-radius:2px"></td>
               <td><button class="chat-close" style="font-size:1.2rem" data-del="${p.id}">&times;</button></td>
             </tr>`).join("")}
         </tbody>
@@ -484,6 +493,11 @@ async function initAdminPage() {
     document.querySelectorAll("[data-price]").forEach((inp) => {
       inp.addEventListener("change", async () => {
         await DB.adminEditProduct(inp.dataset.price, { price: Number(inp.value) });
+      });
+    });
+    document.querySelectorAll("[data-image]").forEach((inp) => {
+      inp.addEventListener("change", async () => {
+        await DB.adminEditProduct(inp.dataset.image, { imageUrl: inp.value.trim() });
       });
     });
     document.querySelectorAll("[data-del]").forEach((btn) => {
@@ -533,8 +547,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initWishlistPage();
   initAdminPage();
 
-  // Keep the nav (login state, cart badge) in sync if auth changes
-  // in another tab, or right after login/logout in this one.
   if (typeof sb !== "undefined") {
     sb.auth.onAuthStateChange(() => paintNavState());
   }
