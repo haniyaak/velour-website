@@ -1,9 +1,5 @@
 /* =========================================================
    VELOUR — Data Layer (Supabase-backed)
-   Same DB.* function names as before, so ui.js barely had to
-   change — but every function is now async (it talks to a real
-   database over the network) and every call site must `await` it.
-   Requires supabase-config.js to run first (defines `sb`).
    ========================================================= */
 
 const ICON_PATHS = {
@@ -17,7 +13,7 @@ function mapProductRow(p) {
   return {
     id: p.id, name: p.name, category: p.category, price: Number(p.price),
     shades: p.shades || [], desc: p.description, colorFrom: p.color_from,
-    colorTo: p.color_to, icon: p.icon,
+    colorTo: p.color_to, icon: p.icon, imageUrl: p.image_url || null,
   };
 }
 
@@ -32,7 +28,6 @@ const THEME_KEY = "velour_theme";
 
 const DB = {
 
-  /* ---------- Products ---------- */
   async getProducts() {
     const { data, error } = await sb.from("products").select("*").order("created_at");
     if (error) { console.error(error); return []; }
@@ -48,6 +43,7 @@ const DB = {
       id: product.id, name: product.name, category: product.category, price: product.price,
       shades: product.shades || [], description: product.desc,
       color_from: product.colorFrom, color_to: product.colorTo, icon: product.icon,
+      image_url: product.imageUrl || null,
     });
     if (error) console.error(error);
   },
@@ -56,6 +52,7 @@ const DB = {
     if (changes.price !== undefined) patch.price = changes.price;
     if (changes.name !== undefined) patch.name = changes.name;
     if (changes.desc !== undefined) patch.description = changes.desc;
+    if (changes.imageUrl !== undefined) patch.image_url = changes.imageUrl;
     const { error } = await sb.from("products").update(patch).eq("id", id);
     if (error) console.error(error);
   },
@@ -64,12 +61,11 @@ const DB = {
     if (error) console.error(error);
   },
 
-  /* ---------- Auth ---------- */
   async registerUser({ name, email, password }) {
     const { data, error } = await sb.auth.signUp({ email, password, options: { data: { name } } });
     if (error) return { error: error.message };
     if (!data.session) {
-      return { error: "Account created — check your email to confirm, then log in. (For a quick demo, turn off 'Confirm email' in Supabase Auth settings.)" };
+      return { error: "Account created — check your email to confirm, then log in." };
     }
     const user = await this.currentUser();
     return { user };
@@ -92,7 +88,6 @@ const DB = {
     };
   },
 
-  /* ---------- Cart ---------- */
   async getCart() {
     const { data: { user } } = await sb.auth.getUser();
     if (!user) return [];
@@ -135,7 +130,6 @@ const DB = {
     }, 0);
   },
 
-  /* ---------- Wishlist ---------- */
   async getWishlist() {
     const { data: { user } } = await sb.auth.getUser();
     if (!user) return [];
@@ -160,7 +154,6 @@ const DB = {
     return list.includes(productId);
   },
 
-  /* ---------- Reviews ---------- */
   async getReviews(productId) {
     const { data, error } = await sb.from("reviews").select("*")
       .eq("product_id", productId).order("created_at", { ascending: false });
@@ -177,7 +170,6 @@ const DB = {
     return reviews.reduce((s, r) => s + r.rating, 0) / reviews.length;
   },
 
-  /* ---------- Orders ---------- */
   async placeOrder(userId, shipping) {
     const [cart, products] = await Promise.all([this.getCart(), this.getProducts()]);
     const total = cart.reduce((sum, l) => {
@@ -198,7 +190,6 @@ const DB = {
     return data.map((o) => ({ id: o.id, items: o.items, total: Number(o.total), status: o.status, date: o.created_at }));
   },
 
-  /* ---------- Appointments ---------- */
   async addAppointment(appt) {
     const { error } = await sb.from("appointments").insert({
       name: appt.name, service: appt.service, date: appt.date || null, time: appt.time || null,
@@ -212,7 +203,6 @@ const DB = {
     return data.map((a) => ({ id: a.id, name: a.name, service: a.service, date: a.date, time: a.time, email: a.email, phone: a.phone, notes: a.notes }));
   },
 
-  /* ---------- Theme (stays local — a device preference, not data) ---------- */
   getTheme() { return LS.get(THEME_KEY, "noir"); },
   setTheme(theme) { LS.set(THEME_KEY, theme); },
 };
